@@ -46,10 +46,64 @@ class LoginWindow:
                 "Неверный логин или пароль"
             )
         else:
-            messagebox.showinfo(
-                "Успешный вход",
-                f"Добро пожаловать, {user['role']}"
-            )
+            self.root.destroy()
+            main_root = tk.Tk()
+            MainWindow(main_root, user)
+            main_root.mainloop()
+
+
+class MainWindow:
+
+    def __init__(self, root, user):
+        self.root = root
+        self.user = user
+        self.root.title("Главное меню")
+        self.root.geometry("400x300")
+
+        self.label_title = tk.Label(
+            root,
+            text=f"Вы вошли как: {user['role']}",
+            font=("Arial", 12)
+        )
+        self.label_title.pack(pady=10)
+
+        self.button_add = tk.Button(
+            root,
+            text="Добавить заявку",
+            width=25,
+            command=self.not_implemented
+        )
+        self.button_add.pack(pady=5)
+
+        self.button_view = tk.Button(
+            root,
+            text="Просмотр заявок",
+            width=25,
+            command=self.not_implemented
+        )
+        self.button_view.pack(pady=5)
+
+        self.button_stats = tk.Button(
+            root,
+            text="Статистика",
+            width=25,
+            command=self.not_implemented
+        )
+        self.button_stats.pack(pady=5)
+
+        self.button_exit = tk.Button(
+            root,
+            text="Выход",
+            width=25,
+            command=self.root.quit
+        )
+        self.button_exit.pack(pady=20)
+
+    def not_implemented(self):
+        messagebox.showinfo(
+            "Информация",
+            "Функция будет реализована далее"
+        )
 
 
 if __name__ == "__main__":
