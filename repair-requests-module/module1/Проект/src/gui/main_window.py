@@ -6,7 +6,7 @@ class MainWindow(tk.Tk):
     def __init__(self, requests_list, current_user):
         super().__init__()
         self.title(f"ООО 'БытСервис' — {current_user['fio']} ({current_user['type']})")
-        self.geometry("900(x)550")
+        self.geometry("900x550")
         self.requests = requests_list
         self.user = current_user # Сохраняем данные вошедшего пользователя
 
@@ -29,7 +29,7 @@ class MainWindow(tk.Tk):
         for req in self.requests:
             self.tree.insert("", tk.END, values=(
                 req.request_id,
-                req.start_date.strftime('%Y-%m-%d'),
+                req.start_date,
                 req.tech_type,
                 req.tech_model,
                 req.status
