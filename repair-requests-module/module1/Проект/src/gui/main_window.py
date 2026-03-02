@@ -58,18 +58,21 @@ class MainWindow(tk.Tk):
     def _edit_request(self):
         selected = self.tree.selection()
         if not selected:
-            messagebox.showwarning("Внимание", "Выберите заявку для редактирования!", icon="warning")
+            messagebox.showwarning("Внимание", "Выберите заявку!", icon="warning")
             return
 
-        item_id = self.tree.item(selected)['values'][0]
-        request_to_edit = next((r for r in self.requests if str(r.request_id) == str(item_id)), None)
+        item_values = self.tree.item(selected)['values']
+        req = next((r for r in self.requests if str(r.request_id) == str(item_values[0])), None)
 
-        if request_to_edit:
-            edit_win = EditWindow(self, request_to_edit)
+        if req:
+            edit_win = EditWindow(self, req)
             self.wait_window(edit_win)
 
-            if edit_win.result:
+            if edit_win.result:  # Если нажали "Сохранить"
+                from utils.csv_handler import save_requests
+                save_requests(self.requests)  # ПЕРЕЗАПИСЬ ФАЙЛА
                 self._refresh_table()
+                messagebox.showinfo("Успех", "Данные успешно сохранены в файл!")
 
     def _refresh_table(self):
         for item in self.tree.get_children():
