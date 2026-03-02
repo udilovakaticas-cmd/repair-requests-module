@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
+from datetime import datetime
 from auth import AuthService
-from services import RequestService
+from services import RequestService, Request
 
 
 class LoginWindow:
@@ -34,10 +35,7 @@ class LoginWindow:
         user = self.auth_service.authenticate(login, password)
 
         if user is None:
-            messagebox.showerror(
-                "Ошибка авторизации",
-                "Неверный логин или пароль"
-            )
+            messagebox.showerror("Ошибка авторизации", "Неверный логин или пароль")
         else:
             self.root.destroy()
             main_root = tk.Tk()
@@ -53,7 +51,7 @@ class MainWindow:
         self.request_service = RequestService()
 
         self.root.title("Главное меню")
-        self.root.geometry("400x300")
+        self.root.geometry("400x350")
 
         tk.Label(
             root,
@@ -79,7 +77,7 @@ class MainWindow:
             root,
             text="Статистика",
             width=25,
-            command=self.not_implemented
+            command=self.show_statistics
         ).pack(pady=5)
 
         tk.Button(
@@ -89,17 +87,26 @@ class MainWindow:
             command=self.root.quit
         ).pack(pady=20)
 
-    def not_implemented(self):
-        messagebox.showinfo(
-            "Информация",
-            "Функция будет реализована далее"
-        )
-
     def open_add_window(self):
         AddRequestWindow(self.root, self.request_service)
 
     def open_view_window(self):
         ViewRequestsWindow(self.root, self.request_service)
+
+    def show_statistics(self):
+        total = len(self.request_service.get_all_requests())
+        if total == 0:
+            messagebox.showinfo("Статистика", "Заявок пока нет")
+            return
+
+        total_time = sum(req.time_to_complete for req in self.request_service.get_all_requests())
+        avg_time = total_time / total
+
+        messagebox.showinfo(
+            "Статистика",
+            f"Всего заявок: {total}\n"
+            f"Среднее время выполнения: {avg_time:.1f} минут"
+        )
 
 
 class AddRequestWindow:
@@ -131,6 +138,10 @@ class AddRequestWindow:
         self.entry_phone = tk.Entry(self.window)
         self.entry_phone.pack()
 
+        tk.Label(self.window, text="Время выполнения (мин)").pack()
+        self.entry_time = tk.Entry(self.window)
+        self.entry_time.pack()
+
         tk.Button(
             self.window,
             text="Сохранить",
@@ -143,27 +154,28 @@ class AddRequestWindow:
         problem = self.entry_problem.get()
         client = self.entry_client.get()
         phone = self.entry_phone.get()
+        time_str = self.entry_time.get()
 
-        if not device or not model or not problem or not client or not phone:
-            messagebox.showerror(
-                "Ошибка",
-                "Все поля должны быть заполнены"
-            )
+        if not all([device, model, problem, client, phone, time_str]):
+            messagebox.showerror("Ошибка", "Все поля должны быть заполнены")
+            return
+
+        try:
+            time_to_complete = float(time_str)
+        except ValueError:
+            messagebox.showerror("Ошибка", "Время выполнения должно быть числом")
             return
 
         self.request_service.add_request(
-            device,
-            model,
-            problem,
-            client,
-            phone
+            device=device,
+            model=model,
+            problem=problem,
+            client=client,
+            phone=phone,
+            time_to_complete=time_to_complete
         )
 
-        messagebox.showinfo(
-            "Успешно",
-            "Заявка успешно добавлена"
-        )
-
+        messagebox.showinfo("Успешно", "Заявка успешно добавлена")
         self.window.destroy()
 
 
@@ -174,21 +186,52 @@ class ViewRequestsWindow:
 
         self.window = tk.Toplevel(parent)
         self.window.title("Просмотр заявок")
-        self.window.geometry("700x400")
+        self.window.geometry("800x500")
 
-        headers = ["ID", "Дата", "Техника", "Модель", "Описание", "Клиент", "Телефон", "Статус"]
+        # Фильтр по статусу
+        tk.Label(self.window, text="Фильтр по статусу:").pack(pady=5)
+        self.status_var = tk.StringVar()
+        self.status_var.set("Все")
+        options = ["Все", "новая заявка", "в процессе ремонта", "готова к выдаче"]
+        tk.OptionMenu(self.window, self.status_var, *options, command=self.refresh_table).pack(pady=5)
+
+        # Canvas + Scrollbar
+        self.canvas = tk.Canvas(self.window)
+        self.frame = tk.Frame(self.canvas)
+        self.scrollbar = tk.Scrollbar(self.window, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.scrollbar.pack(side="right", fill="y")
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
+
+        self.frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+
+        self.refresh_table()
+
+    def refresh_table(self, *args):
+        for widget in self.frame.winfo_children():
+            widget.destroy()
+
+        headers = ["ID", "Дата", "Техника", "Модель", "Описание", "Клиент", "Телефон", "Статус", "Время мин"]
         for idx, h in enumerate(headers):
-            tk.Label(self.window, text=h, borderwidth=1, relief="solid", width=12).grid(row=0, column=idx)
+            tk.Label(self.frame, text=h, borderwidth=1, relief="solid", width=12, bg="#dddddd").grid(row=0, column=idx)
 
-        for row_idx, req in enumerate(self.request_service.get_all_requests(), start=1):
-            tk.Label(self.window, text=req.request_id, borderwidth=1, relief="solid").grid(row=row_idx, column=0)
-            tk.Label(self.window, text=req.date_added.strftime("%d.%m.%Y %H:%M"), borderwidth=1, relief="solid").grid(row=row_idx, column=1)
-            tk.Label(self.window, text=req.device_type, borderwidth=1, relief="solid").grid(row=row_idx, column=2)
-            tk.Label(self.window, text=req.model, borderwidth=1, relief="solid").grid(row=row_idx, column=3)
-            tk.Label(self.window, text=req.problem_description, borderwidth=1, relief="solid").grid(row=row_idx, column=4)
-            tk.Label(self.window, text=req.client_name, borderwidth=1, relief="solid").grid(row=row_idx, column=5)
-            tk.Label(self.window, text=req.phone, borderwidth=1, relief="solid").grid(row=row_idx, column=6)
-            tk.Label(self.window, text=req.status, borderwidth=1, relief="solid").grid(row=row_idx, column=7)
+        filtered_requests = self.request_service.get_all_requests()
+        status_filter = self.status_var.get()
+        if status_filter != "Все":
+            filtered_requests = [r for r in filtered_requests if r.status == status_filter]
+
+        for row_idx, req in enumerate(filtered_requests, start=1):
+            tk.Label(self.frame, text=req.request_id, borderwidth=1, relief="solid").grid(row=row_idx, column=0)
+            tk.Label(self.frame, text=req.date_added.strftime("%d.%m.%Y %H:%M"), borderwidth=1, relief="solid").grid(row=row_idx, column=1)
+            tk.Label(self.frame, text=req.device_type, borderwidth=1, relief="solid").grid(row=row_idx, column=2)
+            tk.Label(self.frame, text=req.model, borderwidth=1, relief="solid").grid(row=row_idx, column=3)
+            tk.Label(self.frame, text=req.problem_description, borderwidth=1, relief="solid").grid(row=row_idx, column=4)
+            tk.Label(self.frame, text=req.client_name, borderwidth=1, relief="solid").grid(row=row_idx, column=5)
+            tk.Label(self.frame, text=req.phone, borderwidth=1, relief="solid").grid(row=row_idx, column=6)
+            tk.Label(self.frame, text=req.status, borderwidth=1, relief="solid").grid(row=row_idx, column=7)
+            tk.Label(self.frame, text=req.time_to_complete, borderwidth=1, relief="solid").grid(row=row_idx, column=8)
 
 
 if __name__ == "__main__":
