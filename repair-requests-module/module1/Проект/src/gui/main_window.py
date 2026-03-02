@@ -78,7 +78,8 @@ class MainWindow(tk.Tk):
                     # Если мастер ввел новый комментарий в окне редактирования
                     # Предположим, мы передаем его через атрибут new_comment_text
                     if hasattr(edit_win, 'new_comment_text') and edit_win.new_comment_text:
-                        save_comment(req.request_id, edit_win.new_comment_text)
+                        # Передаем ID заявки, текст и ID текущего пользователя (мастера)
+                        save_comment(req.request_id, edit_win.new_comment_text, self.user['userID'])
 
                     self._refresh_table()
                     messagebox.showinfo("Успех", "Данные и комментарий сохранены!")
