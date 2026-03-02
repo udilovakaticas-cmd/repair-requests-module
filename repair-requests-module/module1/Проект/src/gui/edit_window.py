@@ -46,9 +46,9 @@ class EditWindow(tk.Toplevel):
         if messagebox.askyesno("Подтверждение", "Сохранить изменения в заявке?"):
             self.request.status = self.status_cb.get()
             self.request.problem = self.desc_text.get("1.0", tk.END).strip()
-            new_comment = self.comment_entry.get()
+            new_comment = self.comment_entry.get().strip()
             if new_comment:
-                self.request.parts = new_comment
+                self.new_comment_text = new_comment  # Сохраняем для передачи в main_window
 
             self.result = self.request
             self.destroy()

@@ -66,3 +66,24 @@ def save_requests(requests_list):
                 })
     except Exception as e:
         messagebox.showerror("Ошибка сохранения", f"Не удалось записать данные: {e}")
+
+
+def save_comment(request_id, message):
+    """Добавление нового комментария в inputDataComments.csv"""
+    root = get_project_root()
+    comment_file = os.path.join(root, 'data', 'inputDataComments.csv')
+
+    # Генерируем новый ID (простой счетчик строк)
+    try:
+        with open(comment_file, mode='r', encoding='utf-8') as f:
+            count = sum(1 for line in f)
+    except FileNotFoundError:
+        count = 1
+
+    try:
+        with open(comment_file, mode='a', encoding='utf-8', newline='') as f:
+            # Структура по ТЗ: commentID;message;requestID
+            writer = csv.writer(f, delimiter=';')
+            writer.writerow([count, message, request_id])
+    except Exception as e:
+        print(f"Ошибка записи комментария: {e}")

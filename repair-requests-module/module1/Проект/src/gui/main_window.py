@@ -71,8 +71,17 @@ class MainWindow(tk.Tk):
             if edit_win.result:  # Если нажали "Сохранить"
                 from utils.csv_handler import save_requests
                 save_requests(self.requests)  # ПЕРЕЗАПИСЬ ФАЙЛА
-                self._refresh_table()
-                messagebox.showinfo("Успех", "Данные успешно сохранены в файл!")
+                if edit_win.result:
+                    from utils.csv_handler import save_requests, save_comment
+                    save_requests(self.requests)
+
+                    # Если мастер ввел новый комментарий в окне редактирования
+                    # Предположим, мы передаем его через атрибут new_comment_text
+                    if hasattr(edit_win, 'new_comment_text') and edit_win.new_comment_text:
+                        save_comment(req.request_id, edit_win.new_comment_text)
+
+                    self._refresh_table()
+                    messagebox.showinfo("Успех", "Данные и комментарий сохранены!")
 
     def _refresh_table(self):
         for item in self.tree.get_children():
