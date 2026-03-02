@@ -1,9 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
-from datetime import datetime
+from services import RequestService
 from auth import AuthService
-from services import RequestService, Request
-
 
 class LoginWindow:
 
@@ -53,39 +51,12 @@ class MainWindow:
         self.root.title("Главное меню")
         self.root.geometry("400x350")
 
-        tk.Label(
-            root,
-            text=f"Вы вошли как: {user['role']}",
-            font=("Arial", 12)
-        ).pack(pady=10)
+        tk.Label(root, text=f"Вы вошли как: {user['role']}", font=("Arial", 12)).pack(pady=10)
 
-        tk.Button(
-            root,
-            text="Добавить заявку",
-            width=25,
-            command=self.open_add_window
-        ).pack(pady=5)
-
-        tk.Button(
-            root,
-            text="Просмотр заявок",
-            width=25,
-            command=self.open_view_window
-        ).pack(pady=5)
-
-        tk.Button(
-            root,
-            text="Статистика",
-            width=25,
-            command=self.show_statistics
-        ).pack(pady=5)
-
-        tk.Button(
-            root,
-            text="Выход",
-            width=25,
-            command=self.root.quit
-        ).pack(pady=20)
+        tk.Button(root, text="Добавить заявку", width=25, command=self.open_add_window).pack(pady=5)
+        tk.Button(root, text="Просмотр заявок", width=25, command=self.open_view_window).pack(pady=5)
+        tk.Button(root, text="Статистика", width=25, command=self.show_statistics).pack(pady=5)
+        tk.Button(root, text="Выход", width=25, command=self.root.quit).pack(pady=20)
 
     def open_add_window(self):
         AddRequestWindow(self.root, self.request_service)
@@ -102,11 +73,8 @@ class MainWindow:
         total_time = sum(req.time_to_complete for req in self.request_service.get_all_requests())
         avg_time = total_time / total
 
-        messagebox.showinfo(
-            "Статистика",
-            f"Всего заявок: {total}\n"
-            f"Среднее время выполнения: {avg_time:.1f} минут"
-        )
+        messagebox.showinfo("Статистика",
+                            f"Всего заявок: {total}\nСреднее время выполнения: {avg_time:.1f} минут")
 
 
 class AddRequestWindow:
@@ -142,11 +110,7 @@ class AddRequestWindow:
         self.entry_time = tk.Entry(self.window)
         self.entry_time.pack()
 
-        tk.Button(
-            self.window,
-            text="Сохранить",
-            command=self.save_request
-        ).pack(pady=10)
+        tk.Button(self.window, text="Сохранить", command=self.save_request).pack(pady=10)
 
     def save_request(self):
         device = self.entry_device.get()
@@ -166,14 +130,7 @@ class AddRequestWindow:
             messagebox.showerror("Ошибка", "Время выполнения должно быть числом")
             return
 
-        self.request_service.add_request(
-            device=device,
-            model=model,
-            problem=problem,
-            client=client,
-            phone=phone,
-            time_to_complete=time_to_complete
-        )
+        self.request_service.add_request(device, model, problem, client, phone, time_to_complete)
 
         messagebox.showinfo("Успешно", "Заявка успешно добавлена")
         self.window.destroy()
@@ -188,14 +145,12 @@ class ViewRequestsWindow:
         self.window.title("Просмотр заявок")
         self.window.geometry("800x500")
 
-        # Фильтр по статусу
         tk.Label(self.window, text="Фильтр по статусу:").pack(pady=5)
         self.status_var = tk.StringVar()
         self.status_var.set("Все")
         options = ["Все", "новая заявка", "в процессе ремонта", "готова к выдаче"]
         tk.OptionMenu(self.window, self.status_var, *options, command=self.refresh_table).pack(pady=5)
 
-        # Canvas + Scrollbar
         self.canvas = tk.Canvas(self.window)
         self.frame = tk.Frame(self.canvas)
         self.scrollbar = tk.Scrollbar(self.window, orient="vertical", command=self.canvas.yview)
