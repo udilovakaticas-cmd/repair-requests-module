@@ -272,6 +272,32 @@ def admin_cabinet():
                            tests=tests)
 
 
+
+    @app.route('/admin/users')
+    @login_required
+    def manage_users():
+
+        role_filter = request.args.get('role', 'all')
+        search_query = request.args.get('search', '')
+
+        query = User.query
+        if role_filter != 'all':
+            query = query.filter_by(role=role_filter)
+        if search_query:
+            query = query.filter(User.fio.ilike(f'%{search_query}%'))
+
+        users = query.all()
+        return render_template('admin/users.html', users=users)
+
+
+
+@app.route('/admin/users/bulk_delete', methods=['POST'])
+def bulk_delete():
+    user_ids = request.form.getlist('selected_users')
+    User.query.filter(User.id.in_(user_ids)).delete(synchronize_session=False)
+    db.session.commit()
+    return redirect(url_for('manage_users'))
+
 # Выход администратора
 @app.route('/logout_admin')
 def logout_admin():
