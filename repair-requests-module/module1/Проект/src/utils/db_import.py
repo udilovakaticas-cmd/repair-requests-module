@@ -10,13 +10,11 @@ def import_csv_to_db():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # 1. Импорт пользователей (из inputDataUsers.csv)
     users_path = os.path.join(root, 'data', 'inputDataUsers.csv')
     if os.path.exists(users_path):
         with open(users_path, mode='r', encoding='utf-8') as f:
             reader = csv.DictReader(f, delimiter=';')
             for row in reader:
-                # Определяем roleID: Менеджер=1, Мастер=2, Оператор=3 (согласно нашему db_creator)
                 role_map = {'Менеджер': 1, 'Мастер': 2, 'Оператор': 3}
                 role_id = role_map.get(row['type'], 2)
 
@@ -25,7 +23,6 @@ def import_csv_to_db():
                     VALUES (?, ?, ?, ?, ?, ?)
                 """, (row['userID'], row['fio'], row['phone'], row['login'], row['password'], role_id))
 
-    # 2. Импорт заявок (из inputDataRequests.csv)
     req_path = os.path.join(root, 'data', 'inputDataRequests.csv')
     if os.path.exists(req_path):
         with open(req_path, mode='r', encoding='utf-8') as f:

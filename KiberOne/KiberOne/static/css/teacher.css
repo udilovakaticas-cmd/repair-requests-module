@@ -1,0 +1,108 @@
+/* --- Общие стили страницы --- */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f7fbff url("../images/teacher-bg.png") no-repeat center center; /* картинка по центру */
+    background-size: cover; /* растягивание на весь экран */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* --- Форма входа --- */
+.teacher-login-form {
+    background: white;
+    padding: 35px 30px;
+    border-radius: 14px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+    width: 320px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* выравнивание полей по центру */
+}
+
+/* --- Логотип над заголовком --- */
+.teacher-login-form .logo {
+    width: 80px;
+    margin-bottom: 15px;
+}
+
+/* --- Заголовок --- */
+.teacher-login-form h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.teacher-login-form h2::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: #FFD93B; /* желтая линия под заголовком */
+    margin: 8px auto 0;
+    border-radius: 2px;
+}
+
+/* --- Поля ввода --- */
+.teacher-login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.teacher-login-form input:focus {
+    outline: none;
+    border-color: #4285f4; /* акцент при фокусе */
+    box-shadow: 0 0 6px rgba(66,133,244,0.4);
+}
+
+/* --- Кнопка входа --- */
+.teacher-login-form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #4285f4;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.teacher-login-form button:hover {
+    background: #2f64ba;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* --- Ошибка --- */
+.error {
+    color: #d32f2f;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* --- Дополнительные элементы --- */
+.teacher-login-form .forgot-password {
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.teacher-login-form .forgot-password:hover {
+    color: #4285f4;
+}

@@ -1,0 +1,651 @@
+/* =========================================
+   ГЛОБАЛЬНЫЕ СТИЛИ — ВСЕ СТРАНИЦЫ
+========================================= */
+
+/* Подключаем шрифт Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+:root {
+    --color-yellow: #FFD300;
+    --color-blue:   #00BFFF;
+    --color-brown:  #8B4513;
+    --color-gray:   #E7E7E7;
+    --color-black:  #222222;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: var(--color-gray);
+    color: var(--color-black);
+    line-height: 1.6;
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-black);
+    margin-bottom: 15px;
+}
+
+/* Ссылки */
+a {
+    color: var(--color-blue);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Кнопки */
+button {
+    background-color: var(--color-yellow);
+    color: var(--color-black);
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+button:hover {
+    background-color: var(--color-brown);
+    color: #fff;
+}
+
+/* Формы */
+input, select, textarea {
+    padding: 10px;
+    border: 1px solid var(--color-gray);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-blue);
+    box-shadow: 0 0 5px var(--color-blue);
+}
+
+/* =========================================
+   ШАПКА
+========================================= */
+.main-header {
+    width: 100%;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-blue);
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.main-header nav a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+}
+
+.main-header nav a:hover {
+    color: var(--color-yellow);
+}
+
+/* =========================================
+   ДАШБОРД — ЛИЧНЫЙ КАБИНЕТ
+========================================= */
+.split-container {
+    display: flex;
+    height: calc(100vh - 120px);
+}
+
+.yellow-side {
+    background: #FFD93B;
+    color: #2b2300;
+}
+
+.left-panel {
+    flex: 1;
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.subtitle {
+    font-size: 18px;
+    margin-top: -10px;
+    margin-bottom: 30px;
+}
+
+.role-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.role-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    width: 260px;
+    border: 2px solid rgba(0,0,0,0.15);
+    border-radius: 12px;
+    text-decoration: none;
+    background: #fff;
+    font-size: 18px;
+    transition: 0.25s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.role-card .icon {
+    font-size: 26px;
+}
+
+.role-card:hover {
+    border-color: #2b2300;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+}
+
+.small-link {
+    margin-top: 20px;
+    font-size: 14px;
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+.small-link:hover {
+    text-decoration: underline;
+}
+
+.white-side {
+    background: #f5f5f5;
+}
+
+.right-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-cat {
+    max-width: 380px;
+}
+
+/* Добро пожаловать */
+.dashboard-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 25px;
+}
+
+/* Киберон */
+#idle-kiberon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 250px;
+    opacity: 0.95;
+    pointer-events: none;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
+
+/* =========================================
+   СТРАНИЦА ВХОДА
+========================================= */
+/* Фон с пикселями */
+.pixel-bg {
+    background: #d6d6d6 url("../images/pixel-bg.png") repeat;
+    background-size: 200px;
+    animation: scroll-bg 40s linear infinite;
+}
+
+@keyframes scroll-bg {
+    from { background-position: 0 0; }
+    to   { background-position: 300px 200px; }
+}
+
+.login-container {
+    max-width: 600px;
+    background: white;
+    padding: 30px 40px;
+    margin: 60px auto;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.1);
+    text-align: center;
+    border: 3px solid var(--color-yellow);
+}
+
+.login-container .logo {
+    width: 90px;
+    margin-bottom: 15px;
+}
+
+.login-title {
+    font-size: 28px;
+    color: #003a78;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.login-subtitle {
+    font-size: 16px;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+/* Контейнер аватаров */
+.avatar-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 100%;
+}
+
+.avatar-list img {
+    width: 60px;       /* уменьшаем до нормального размера */
+    height: 60px;
+    border-radius: 12px;
+    transition: 0.2s;
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.avatar-list img:hover,
+input[type=radio]:checked + img {
+    transform: scale(1.1);
+    border-color: #FFD200; /* желтая рамка при hover/выборе */
+}
+
+/* Анимации */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.8s ease forwards;
+}
+
+@keyframes hover-bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0); }
+}
+
+.animate-hover-bounce:hover {
+    animation: hover-bounce 0.4s ease;
+}
+
+/* ---------- ФОН ---------- */
+.student-dashboard {
+    background: linear-gradient(to bottom, #e0e7ff 0%, #f2f2f2 100%);
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    padding-bottom: 60px;
+}
+
+/* ---------- ШАПКА ---------- */
+.student-header {
+    background: linear-gradient(90deg, #003a78, #00BFFF);
+    color: #FFD200;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    padding: 25px 30px;
+    text-align: center;
+    border-bottom: 4px solid #FFD200;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    border-radius: 0 0 15px 15px;
+}
+
+/* ---------- АВАТАРЫ ---------- */
+.avatar-panel {
+    max-width: 750px;
+    margin: 30px auto;
+    padding: 20px;
+    background: linear-gradient(145deg, #ffffff, #f9f9f9);
+    border-radius: 20px;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.avatar-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.avatar-picker img {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+.avatar-picker img:hover,
+.avatar-picker img.selected {
+    transform: scale(1.15);
+    border-color: #FFD200;
+    box-shadow: 0 4px 15px rgba(255,210,0,0.5);
+}
+
+/* ---------- КАРТОЧКИ УРОВНЕЙ ---------- */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 10px;
+}
+
+.module-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, border 0.3s, background 0.3s;
+    border: 3px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    word-wrap: break-word;
+}
+
+/* Hover эффект */
+.module-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.25);
+    background: linear-gradient(135deg, #e0f0ff, #ffffff);
+}
+
+/* Статусы */
+.module-ready { border-color: #00BFFF; }
+.module-progress { border-color: #FFD200; }
+.module-locked { border-color: #808080; opacity: 0.6; cursor: not-allowed; }
+
+/* Иконки */
+.module-card .module-icon img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+/* Прогресс */
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #FFD200;
+    border-radius: 8px;
+    width: 0%;
+    transition: width 0.6s ease;
+}
+
+.progress-text {
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* ---------- МАСКОТ ---------- */
+#idle-kiberon {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 260px;
+    opacity: 0.95;
+    pointer-events: none;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+/* ---------- АНИМАЦИИ ---------- */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.8s ease forwards;
+}
+/* ======== ХЕДЕР ТЕСТА ======== */
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.test-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #003a78; /* темно-синий */
+}
+
+/* Фон для затемнения остальной страницы */
+#exitConfirm {
+    display: none;               /* скрыт по умолчанию */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.45); /* полупрозрачный оверлей */
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* Само модальное окно */
+.modal-box {
+    background: #ffffff;          /* чисто белый */
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25); /* тень для объёма */
+}
+
+.exit-test img {
+    width: 24px;
+    height: 24px;
+}
+
+/* ======== ПРОГРЕСС-ИНДИКАТОР ======== */
+.progress-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.progress-step {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #ccc; /* серый для будущих */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.progress-step.completed {
+    background-color: #ffd200; /* желтый */
+}
+
+.progress-step.current {
+    background-color: #00bfff; /* синий */
+}
+
+/* ======== КАРТОЧКА ВОПРОСА ======== */
+#question-container {
+    background: #fdfdfd;
+    padding: 30px 25px;
+    border-radius: 18px;
+    max-width: 650px;
+    margin: 0 auto;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#question-container h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #003a78;
+}
+
+#question-container h2 span {
+    color: #ffd200; /* выделяем цифры вопроса желтым */
+}
+
+/* ======== ВАРИАНТЫ ОТВЕТОВ ======== */
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    background: #eef4ff;
+    padding: 12px 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.answer-option:hover {
+    background: #dce7ff;
+}
+
+.answer-option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #00bfff; /* синий для выбранного кружка */
+}
+
+.answer-option.selected {
+    background-color: #fff4cc; /* светло-желтый */
+    border: 2px solid #00bfff;
+}
+
+/* ======== КНОПКА "ОТВЕТИТЬ" ======== */
+.btn-next {
+    margin-top: 20px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 14px;
+    background: #ffd200;
+    color: #003a78;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-next:hover {
+    background: #ffeb66;
+    transform: translateY(-2px);
+}
+
+/* ======== МАСКОТ ======== */
+#cat-animation {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+#cat-animation.show {
+    opacity: 1;
+}
+
+#cat-animation img {
+    width: 220px; /* чуть больше */
+}
+
+/* ======== ОКНО ВЫХОДА ======== */
+#exitConfirm .modal-box {
+    width: 380px; /* чуть больше */
+    text-align: center;
+    padding: 30px 25px;
+    border-radius: 16px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+#exitConfirm .modal-box img {
+    width: 150px; /* не выходит за рамки */
+    margin-bottom: 15px;
+}
+
+#exitConfirm .btn-exit, #exitConfirm .btn-cancel {
+    margin: 10px 5px 0 5px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+}
+
+#exitConfirm .btn-exit {
+    background: #ffd200;
+    color: #003a78;
+}
+
+#exitConfirm .btn-cancel {
+    background: #00bfff;
+    color: #fff;
+}
+

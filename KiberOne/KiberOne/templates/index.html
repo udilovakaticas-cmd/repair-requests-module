@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>KiberOne — Главное окно</title>
+</head>
+<body>
+
+<!-- ШАПКА -->
+<header class="main-header">
+    <div class="logo">KiberOne</div>
+    <nav>
+        <a href="#">О проекте</a>
+        <a href="#">Контакты</a>
+        <a href="#">Помощь</a>
+    </nav>
+</header>
+
+<!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+<div class="split-container">
+
+    <!-- ЛЕВАЯ ПАНЕЛЬ (теперь жёлтая) -->
+    <div class="left-panel yellow-side">
+        <h1>Добро пожаловать в KiberOne!</h1>
+        <p class="subtitle">Твой персональный путь в мир IT начинается здесь.</p>
+
+        <div class="role-cards">
+
+            <a href="/login_student" class="role-card dark-text">
+                <div class="icon">🎮</div>
+                <div>Я хочу учиться</div>
+            </a>
+
+            <a href="/login_teacher" class="role-card dark-text">
+                <div class="icon">📚</div>
+                <div>Я преподаю</div>
+            </a>
+
+            <a href="/login_admin" class="role-card dark-text">
+                <div class="icon">⚙️</div>
+                <div>Администратор</div>
+            </a>
+
+        </div>
+
+        <a href="/login" class="small-link dark-text">Уже есть аккаунт? Войти</a>
+    </div>
+
+    <!-- ПРАВАЯ ПАНЕЛЬ (кот на белом) -->
+    <div class="right-panel white-side">
+        <img src="{{ url_for('static', filename='animations/neutral.gif') }}"
+             alt="Кот-кодер" class="main-cat">
+    </div>
+
+</div>
+
+<!-- ФУТЕР -->
+<footer class="main-footer">
+    © 2025 KiberOne | Все права защищены
+</footer>
+
+</body>
+</html>

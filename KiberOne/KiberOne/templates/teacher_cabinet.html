@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+<title>Кабинет учителя</title>
+<style>
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f7fbff;
+    margin: 0;
+    padding: 0 20px;
+}
+
+/* --- Хедер --- */
+header {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 22px;
+    margin: 0;
+    color: #222;
+}
+
+header .logout-btn {
+    background: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+header .logout-btn:hover {
+    background: #FFD93B;
+    color: #222;
+    transform: scale(1.05);
+}
+
+/* --- Контейнер карточек --- */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* --- Карточка --- */
+.card {
+    background: white;
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+/* --- Форма внутри карточки --- */
+.card form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* чтобы input занимал всю ширину карточки */
+}
+
+/* --- Поля ввода и кнопки --- */
+.card input, .card button {
+    width: 100%;
+    max-width: 100%; /* не выходит за пределы карточки */
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    box-sizing: border-box; /* padding учитывается в ширине */
+}
+
+/* --- Кнопка --- */
+.card button {
+    background: #4285f4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card button:hover {
+    background: #2f64ba;
+}
+
+/* --- Таблица тестов --- */
+.test-table {
+    width: 100%;
+    table-layout: fixed; /* фиксированная ширина колонок */
+    word-wrap: break-word; /* перенос длинного текста */
+}
+
+.test-table th, .test-table td {
+    padding: 12px;
+    text-align: left;
+    overflow-wrap: break-word; /* перенос длинного текста */
+}
+
+/* --- Формы --- */
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    outline: none;
+    border-color: #4285f4;
+    box-shadow: 0 0 8px rgba(66,133,244,0.4);
+}
+
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #4285f4;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #2f64ba;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: scale(1.03);
+}
+
+/* --- Список тестов в таблице --- */
+.test-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.test-table th, .test-table td {
+    padding: 12px;
+    text-align: left;
+}
+
+.test-table th {
+    background: #f0f4ff;
+    color: #222;
+}
+
+.test-table tr {
+    transition: all 0.3s ease;
+}
+
+.test-table tr:hover {
+    background: #fdf7e2;
+}
+
+.status-active {
+    background: #4285f4;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.status-draft {
+    background: #FFD93B;
+    color: #222;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.action-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 8px;
+    transition: transform 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.2);
+}
+
+.action-edit { color: #4285f4; }
+.action-delete { color: #777; }
+
+/* --- Список учеников --- */
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    transition: all 0.2s ease;
+}
+
+.card ul li:last-child { border-bottom: none; }
+
+.card ul li:hover {
+    background: #fdf7e2;
+    border-radius: 6px;
+    padding-left: 10px;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+    <h1>Кабинет учителя - Привет, {{ teacher.first_name }} {{ teacher.last_name }}</h1>
+    <a href="{{ url_for('logout_teacher') }}"><button class="logout-btn">Выйти</button></a>
+</header>
+
+<div class="container">
+
+    <!-- Добавить тест -->
+    <div class="card">
+        <h3>Добавить новый тест</h3>
+        <form action="{{ url_for('add_test') }}" method="POST">
+            <div class="form-group">
+                <input type="text" name="test_name" placeholder="Название теста" required>
+            </div>
+            <button type="submit">Добавить тест</button>
+        </form>
+    </div>
+
+    <!-- Добавить ученика -->
+    <div class="card">
+        <h3>Добавить ученика</h3>
+        <form action="{{ url_for('add_student') }}" method="POST">
+            <div class="form-group">
+                <input type="text" name="first_name" placeholder="Имя" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="last_name" placeholder="Фамилия" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="login" placeholder="Логин" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Пароль" required>
+            </div>
+            <button type="submit">Добавить ученика</button>
+        </form>
+    </div>
+
+    <!-- Существующие тесты -->
+    <div class="card">
+        <h3>Существующие тесты</h3>
+        <table class="test-table">
+            <tr>
+                <th>Название</th>
+                <th>Статус</th>
+                <th>Вопросы</th>
+                <th>Действия</th>
+            </tr>
+            {% for test_id, test in tests.items() %}
+            <tr>
+                <td>{{ test.name }}</td>
+                <td>
+                    {% if test.active %}
+                        <span class="status-active">Активен</span>
+                    {% else %}
+                        <span class="status-draft">Черновик</span>
+                    {% endif %}
+                </td>
+                <td>{{ test.questions|length }}</td>
+                <td>
+                    <button class="action-btn action-edit">✏️</button>
+                    <button class="action-btn action-delete">🗑️</button>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">Тесты отсутствуют</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- Ученики -->
+    <div class="card">
+        <h3>Ученики</h3>
+        <ul>
+            {% for student_id, student in students.items() %}
+            <li>{{ student.first_name }} {{ student.last_name }} ({{ student.login }})</li>
+            {% else %}
+            <li>Ученики отсутствуют</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+<title>Кабинет администратора</title>
+<style>
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f7fbff;
+    padding: 20px;
+}
+
+/* --- Заголовок --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #222;
+    position: relative;
+}
+
+.header h2::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #FFD93B;
+    margin-top: 5px;
+    border-radius: 2px;
+}
+
+.logout {
+    padding: 8px 15px;
+    border-radius: 8px;
+    background: #4285f4;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.logout:hover {
+    background: #FFD93B;
+    color: #222;
+}
+
+/* --- Карточки --- */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* --- Заголовки карточек --- */
+.card h3 {
+    margin-top: 0;
+    color: #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- Кнопки действий --- */
+.btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 5px;
+    transition: 0.3s;
+}
+
+.btn.add { background: #4285f4; color: white; }
+.btn.edit { background: #FFA500; color: white; }
+.btn.delete { background: #d32f2f; color: white; }
+
+.btn:hover { opacity: 0.8; }
+
+/* --- Списки --- */
+ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h2>Привет, {{ admin.first_name }} {{ admin.last_name }}</h2>
+    <a class="logout" href="{{ url_for('logout_admin') }}">Выйти</a>
+</div>
+
+<div class="card">
+    <h3>Все пользователи
+        <button class="btn add">Добавить</button>
+    </h3>
+    <ul>
+        {% for uid, user in users.items() %}
+        <li>
+            <span>{{ user.first_name }} {{ user.last_name }} ({{ user.login }}) - {{ user.role }}</span>
+            <span>
+                <button class="btn edit">Изменить</button>
+                <button class="btn delete">Удалить</button>
+            </span>
+        </li>
+        {% else %}
+        <li>Пользователи отсутствуют</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="card">
+    <h3>Ученики
+        <button class="btn add">Добавить</button>
+    </h3>
+    <ul>
+        {% for sid, student in students.items() %}
+        <li>
+            <span>{{ student.first_name }} {{ student.last_name }} ({{ student.login }})</span>
+            <span>
+                <button class="btn edit">Изменить</button>
+                <button class="btn delete">Удалить</button>
+            </span>
+        </li>
+        {% else %}
+        <li>Ученики отсутствуют</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="card">
+    <h3>Все тесты
+        <button class="btn add">Добавить</button>
+    </h3>
+    <ul>
+        {% for test_id, test in tests.items() %}
+        <li>
+            <span>{{ test.name }} ({{ test_id }})</span>
+            <span>
+                <button class="btn edit">Изменить</button>
+                <button class="btn delete">Удалить</button>
+            </span>
+        </li>
+        {% else %}
+        <li>Тесты отсутствуют</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>

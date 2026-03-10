@@ -1,20 +1,17 @@
 import qrcode
 import tkinter as tk
-from tkinter import ttk, messagebox  # Добавили ttk и messagebox
+from tkinter import ttk, messagebox
 from PIL import ImageTk
 
 
 def show_feedback_qr():
-    # Ссылка из ТЗ
     url = "https://docs.google.com/forms/d/e/1FAIpQLSdhZcExx6LSIXxk0ub55mSu-WIh23WYdGG9HY5EZhLDo7P8eA/viewform?usp=sf_link"
 
-    # Генерация QR
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="white")
 
-    # Создаем окно
     top = tk.Toplevel()
     top.title("Оцените нашу работу")
 
@@ -28,7 +25,6 @@ def show_feedback_qr():
 class MainWindow(tk.Tk):
     def __init__(self, requests_list, current_user):
         super().__init__()
-        # Приветствие согласно роли
         self.title(f"ООО 'БытСервис' — {current_user['fio']} ({current_user['type']})")
         self.geometry("900x600")
         self.requests = requests_list
@@ -41,7 +37,6 @@ class MainWindow(tk.Tk):
         label.pack(pady=10)
 
         columns = ("id", "date", "tech", "model", "status")
-        # Исправлено: теперь ttk импортирован
         self.tree = ttk.Treeview(self, columns=columns, show='headings')
 
         self.tree.heading("id", text="№")
@@ -56,7 +51,6 @@ class MainWindow(tk.Tk):
         btn_frame = tk.Frame(self)
         btn_frame.pack(pady=20)
 
-        # Доступ для ролей из Модуля 1 и 3
         if self.user['type'] in ["Оператор", "Мастер", "Менеджер по качеству"]:
             tk.Button(btn_frame, text="Редактировать заявку",
                       command=self._edit_request).pack(side=tk.LEFT, padx=10)
@@ -65,14 +59,12 @@ class MainWindow(tk.Tk):
             tk.Button(btn_frame, text="Отчет по статистике",
                       command=self._show_stats).pack(side=tk.LEFT, padx=10)
 
-        # Кнопка QR-кода (Новое требование Модуля 3)
         tk.Button(btn_frame, text="QR-отзыв",
                   command=show_feedback_qr, bg="#e1e1e1").pack(side=tk.LEFT, padx=10)
 
         tk.Button(btn_frame, text="Выход", command=self.destroy).pack(side=tk.LEFT, padx=10)
 
     def _show_stats(self):
-        # Логика статистики из Модуля 1
         completed = [r for r in self.requests if r.status == "Готова к выдаче"]
         count = len(completed)
         messagebox.showinfo("Статистика", f"Выполнено заявок: {count}")
@@ -87,7 +79,6 @@ class MainWindow(tk.Tk):
         req = next((r for r in self.requests if str(r.request_id) == str(item_values[0])), None)
 
         if req:
-            # Здесь предполагается наличие EditWindow из предыдущих шагов
             from gui.edit_window import EditWindow
             edit_win = EditWindow(self, req)
             self.wait_window(edit_win)

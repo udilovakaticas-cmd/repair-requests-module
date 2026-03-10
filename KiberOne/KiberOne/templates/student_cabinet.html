@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/images/favicon.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Кибер-Штаб ученика</title>
+</head>
+
+<body class="student-dashboard pixel-bg">
+
+    <!-- Шапка -->
+    <header class="student-header">
+        <div class="student-title">
+            ⭐ Кибер-Штаб {{ student.first_name }}
+        </div>
+    </header>
+
+
+    <!-- Смена аватара -->
+    <section class="avatar-panel card">
+        <h2>Выбери нового героя:</h2>
+
+        <div class="avatar-picker">
+            {% for avatar in ['cat_coder.png','fox_friend.png','owl_wise.png','bear_strong.png','raccoon_smart.png'] %}
+            <div class="avatar-choice" onclick="changeAvatar('{{ avatar }}')">
+                <img src="/static/avatars/{{ avatar }}" alt="">
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <!-- Карточки "уровней" -->
+    <section class="module-grid">
+
+        <!-- Уровень 1 -->
+        <div class="module-card module-ready"
+             onclick="openGame('https://nabiraem.ru/games/keyboard','Сборка клавиатуры')">
+            <div class="module-icon">
+                <img src="/static/icons/keyboard.png">
+            </div>
+            <h3>Конструктор: Сборка клавиатуры</h3>
+        </div>
+
+        <!-- Уровень 2 -->
+        <div class="module-card module-ready"
+             onclick="openGame('https://stamina-online.com/ru','Клавиатурная Битва')">
+            <div class="module-icon">
+                <img src="/static/icons/stamina.png">
+            </div>
+            <h3>Клавиатурная битва</h3>
+        </div>
+
+        <!-- Адаптивный тест с прогрессом -->
+        <div class="module-card module-progress"
+             onclick="openTest('{{ url_for('test', level_id=1) }}')">
+            <div class="module-icon">
+                <img src="/static/icons/test.png">
+            </div>
+            <h3>Адаптивная миссия</h3>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ student.progress }}%;"></div>
+            </div>
+            <div class="progress-text">
+                Выполнено: {{ student.progress }}%
+            </div>
+        </div>
+
+        <!-- Заблокированные -->
+        <div class="module-card module-locked">
+            <div class="module-icon">
+                <img src="/static/icons/future.png">
+            </div>
+            <h3>Тест профориентации</h3>
+        </div>
+
+        <div class="module-card module-locked">
+            <div class="module-icon">
+                <img src="/static/icons/future.png">
+            </div>
+            <h3>Будущая миссия</h3>
+        </div>
+
+    </section>
+
+
+    <!-- Маскот -->
+    <img id="idle-kiberon"
+         src="/static/gifs/kiberon_idle.gif"
+         alt="kiberon">
+
+    <script>
+        function changeAvatar(filename) {
+            fetch('/update_avatar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'avatar=' + filename
+            }).then(() => location.reload());
+        }
+
+        function openGame(url, title) {
+            window.open(
+                url,
+                title,
+                'width=800,height=600,resizable=yes,scrollbars=yes'
+            );
+        }
+
+        function openTest(url) {
+            window.location.href = url;
+        }
+    </script>
+
+</body>
+</html>

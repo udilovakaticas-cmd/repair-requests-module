@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="login-page pixel-bg"> <!-- один контейнер с классами -->
+    <div class="login-container animate-fade-in">
+
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo">
+
+        <h2 class="login-title">Вход ученика</h2>
+        <p class="login-subtitle">Твой код ждёт тебя! Приступай к миссии!</p>
+
+        <form method="POST" action="/login_student" class="login-form">
+
+            <label>Имя:</label>
+            <input type="text" name="first_name" placeholder="Введи своё имя" required>
+
+            <label>Фамилия:</label>
+            <input type="text" name="last_name" placeholder="Введи свою фамилию" required>
+
+            <p class="avatar-title">Выбери своего Кибер-Героя:</p>
+
+            <div class="avatar-list"> <!-- правильный контейнер -->
+                {% for avatar in ['cat_coder.png','fox_friend.png','owl_wise.png','bear_strong.png','raccoon_smart.png'] %}
+                <label class="avatar-option">
+                    <input type="radio" name="avatar" value="{{ avatar }}" required>
+                    <img src="{{ url_for('static', filename='avatars/' + avatar) }}">
+                </label>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn-submit animate-hover-bounce">Начать</button>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

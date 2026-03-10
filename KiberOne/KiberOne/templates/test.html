@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Тест</title>
+</head>
+<body class="test-page">
+
+<!-- ХЕДЕР ТЕСТА -->
+<header class="test-header">
+    <div class="test-title">Тест</div>
+    <div class="exit-test" id="leave-btn">
+        <img src="{{ url_for('static', filename='icons/exit.png') }}" alt="Выход">
+        Выйти
+    </div>
+</header>
+
+<!-- ПРОГРЕСС -->
+<div class="progress-indicator">
+    {% for i in range(1, total+1) %}
+    <div class="progress-step {% if i < index %}completed{% elif i == index %}current{% endif %}">{{ i }}</div>
+    {% endfor %}
+</div>
+
+<!-- КАРТОЧКА ВОПРОСА -->
+<div id="question-container" class="slide-in">
+
+    <h2>Вопрос <span>{{ index }}</span> из <span>{{ total }}</span></h2>
+    <p class="question-text">{{ question.question }}</p>
+
+    <form method="POST" id="answerForm">
+        {% for option in question.options %}
+        <label class="answer-option">
+            <input type="radio" name="answer" value="{{ loop.index0 }}" required>
+            {{ option }}
+        </label>
+        {% endfor %}
+
+        <button type="submit" class="btn-next">Ответить</button>
+    </form>
+</div>
+
+<!-- МАСКОТ -->
+<div id="cat-animation">
+    <img id="cat-gif" src="">
+</div>
+
+<!-- ОКНО ВЫХОДА -->
+<div id="exitConfirm">
+    <div class="modal-box">
+        <img src="/static/gifs/sad.gif">
+        <p>Ты уверен, что хочешь выйти? Прогресс не сохранится.</p>
+        <a href="/student_cabinet" class="btn-exit">Выйти</a>
+        <button class="btn-cancel" id="cancelExit">Отмена</button>
+    </div>
+</div>
+
+<script>
+/* Активация маскота */
+function hideCat() {
+    setTimeout(() => {
+        document.getElementById("cat-animation").classList.remove("show");
+    }, 1500);
+}
+
+{% if answer_checked %}
+    {% if wrong %}
+        document.getElementById("cat-gif").src = "/static/gifs/thinking.gif";
+    {% else %}
+        document.getElementById("cat-gif").src = "/static/gifs/success.gif";
+    {% endif %}
+    document.getElementById("cat-animation").classList.add("show");
+    hideCat();
+{% endif %}
+
+/* Анимация ухода */
+document.getElementById("answerForm").addEventListener("submit", function () {
+    const block = document.getElementById("question-container");
+    block.classList.remove("slide-in");
+    block.classList.add("slide-out");
+});
+
+/* Кнопка выхода */
+document.addEventListener('DOMContentLoaded', function() {
+    const leaveBtn = document.getElementById("leave-btn");
+    const exitConfirm = document.getElementById("exitConfirm");
+    const cancelExit = document.getElementById("cancelExit");
+
+    leaveBtn.addEventListener("click", () => {
+        exitConfirm.style.display = "flex";
+    });
+
+    cancelExit.addEventListener("click", () => {
+        exitConfirm.style.display = "none";
+    });
+});
+
+
+/* Выделение выбранного ответа */
+const options = document.querySelectorAll('.answer-option');
+options.forEach(opt => {
+    opt.addEventListener('click', () => {
+        options.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+    });
+});
+</script>
+
+</body>
+</html>

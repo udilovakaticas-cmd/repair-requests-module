@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/teacher.css') }}">
+<title>Вход учителя</title>
+</head>
+<body>
+
+<form class="teacher-login-form" method="POST">
+    <img class="logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="KIBERone">
+    <h2>Вход учителя</h2>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <input type="text" name="login" placeholder="Логин" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <button type="submit">Войти</button>
+
+    <span class="forgot-password">Забыли пароль?</span>
+</form>
+
+</body>
+</html>

@@ -3,8 +3,6 @@ import os
 from tkinter import messagebox
 
 def get_project_root():
-    """Находит путь к корневой папке 'Проект'"""
-    # Поднимаемся на 2 уровня вверх от этого файла (из utils в src, затем в корень)
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 def load_users(project_root):
@@ -36,13 +34,11 @@ def load_all_data(project_root):
 
 
 def save_requests(requests_list):
-    """Сохранение всех заявок обратно в CSV"""
     root = get_project_root()
     req_file = os.path.join(root, 'data', 'inputDataRequests.csv')
 
     try:
         with open(req_file, mode='w', encoding='utf-8', newline='') as f:
-            # Заголовки должны строго соответствовать ТЗ
             fieldnames = [
                 'requestID', 'startDate', 'homeTechType', 'homeTechModel',
                 'problemDescryption', 'requestStatus', 'completionDate',
@@ -69,11 +65,9 @@ def save_requests(requests_list):
 
 
 def save_comment(request_id, message, master_id):
-    """Добавление нового комментария с привязкой к мастеру и заявке"""
     root = get_project_root()
     comment_file = os.path.join(root, 'data', 'inputDataComments.csv')
 
-    # Считаем строки для нового ID
     try:
         with open(comment_file, mode='r', encoding='utf-8') as f:
             count = sum(1 for line in f)
@@ -82,7 +76,6 @@ def save_comment(request_id, message, master_id):
 
     try:
         with open(comment_file, mode='a', encoding='utf-8', newline='') as f:
-            # Записываем строго по порядку: commentID;message;masterID;requestID
             writer = csv.writer(f, delimiter=';')
             writer.writerow([count, message, master_id, request_id])
     except Exception as e:
